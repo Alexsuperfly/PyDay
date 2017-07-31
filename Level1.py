@@ -104,7 +104,6 @@ class Row(object):
 		self.myblocks.clear(screen,background)
 
 
-
 def main():
 	#Initialize system
 	pygame.init()
