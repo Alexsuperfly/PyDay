@@ -2,7 +2,7 @@ import pygame
 import time
 import random
 
-"""Level for PyGame"""
+"""Level for PyDay: Survive The Semester"""
 
 #pygame
 pygame.init()
