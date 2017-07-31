@@ -15,7 +15,7 @@ global SCREEN_HEIGHT
 SCREEN_HEIGHT = 600
 
 global ROW_COOLDOWN
-ROW_COOLDOWN = 30
+ROW_COOLDOWN = 27
 
 
 def load_png(name):
@@ -35,24 +35,17 @@ class Player(pygame.sprite.Sprite):
 		self.image, self.rect = load_png("character.png")
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
-		self.speed = 10
-		self.state = "still"
-		self.movepos = [0,0]
-		self.rect.midbottom = self.area.midbottom
+		self.speed = 6
+		self.state = "falling"
+		self.movepos = [0,5]
+		self.rect.midtop = self.area.midtop
+		self.rect.top = self.rect.top + 10
 
 	def update(self):
 		newpos = self.rect.move(self.movepos)
 		if self.area.contains(newpos):
 			self.rect = newpos
 		pygame.event.pump()
-
-	def moveup(self):
-		self.movepos[1] = self.movepos[1] - self.speed
-		self.state = "moveup"
-
-	def movedown(self):
-		self.movepos[1] = self.movepos[1] + self.speed
-		self.state = "movedown"
 
 	def moveleft(self):
 		self.movepos[0] = self.movepos[0] - self.speed
@@ -62,16 +55,20 @@ class Player(pygame.sprite.Sprite):
 		self.movepos[0] = self.movepos[0] + self.speed
 		self.state = "moveright"
 
+	def dead(self):
+		if self.rect.top < 1:
+			return 1
+
 
 class block(pygame.sprite.Sprite):
 	def __init__(self, xpos):
 		pygame.sprite.Sprite.__init__(self)
 		self.image, self.rect = load_png("block.png")
-		self.movepos = [0,5]
+		self.movepos = [0,-4]
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 		self.rect.left = xpos
-		self.rect.top = 0
+		self.rect.top = SCREEN_HEIGHT - 20
 
 	def update(self):
 		newpos = self.rect.move(self.movepos)
@@ -83,23 +80,18 @@ class block(pygame.sprite.Sprite):
 class Row(object):
 	def __init__(self, glocation, gsize):
 		self.myblocks = pygame.sprite.Group()
-		self.speed = 5
+		self.speed = 4
 		self.gaplocation = glocation
 		self.gapsize = gsize
-		self.yposition = 0
+		self.yposition = SCREEN_HEIGHT - 20
 		for x in range(0,SCREEN_WIDTH,20):
 			if x < glocation or x > (glocation+gsize):
 				self.myblocks.add(block(x))
 
-	def moverow(self):
-		self.yposition = self.yposition + self.speed
-		for each in self.myblocks:
-			each.movedown(self.speed)
-
 	def update(self):
-		if (self.yposition + 20) < SCREEN_HEIGHT:
+		if (self.yposition > 0):
 			self.myblocks.update()
-			self.yposition = self.yposition + 5
+			self.yposition = self.yposition - self.speed
 			return 0
 		else:
 			self.myblocks.empty()
@@ -136,7 +128,7 @@ def main():
 	NUMROWS = 5
 
 	global rowcooldown
-	rowcooldown = ROW_COOLDOWN
+	rowcooldown = 10
 
 	#Initialize sprites
 	playersprite = pygame.sprite.RenderPlain(player)
@@ -148,7 +140,11 @@ def main():
 	#The event loop
 	while 1:
 		#max the fps at 60
-		clock.tick(50)
+		clock.tick(45)
+
+		if player.dead():
+			game_over()
+			break
 
 		if rowcooldown:
 			rowcooldown = rowcooldown -1
@@ -160,18 +156,14 @@ def main():
 			if event.type == QUIT:
 				return
 			elif event.type == KEYDOWN:
-				if event.key == K_UP:
-					player.moveup()
-				if event.key == K_DOWN:
-					player.movedown()
 				if event.key == K_LEFT:
 					player.moveleft()
 				if event.key == K_RIGHT:
 					player.moveright()
 			elif event.type == KEYUP:
-				if event.key == K_UP or event.key == K_DOWN or event.key == K_LEFT or event.key == K_RIGHT:
-					player.movepos = [0,0]
-					player.state = "still"
+				if event.key == K_LEFT or event.key == K_RIGHT:
+					player.movepos = [0,5]
+					player.state = "falling"
 
 		#fill old areas with background again
 		screen.blit(background, player.rect, player.rect)
