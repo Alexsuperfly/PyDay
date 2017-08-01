@@ -2,7 +2,7 @@ import pygame
 import time
 import random
 
-"""Level for PyGame"""
+"""Level for PyDay: Survive The Semester"""
 
 #pygame
 pygame.init()
@@ -18,6 +18,9 @@ gpa_width = 73
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Pass Python')
 clock = pygame.time.Clock()
+
+#score
+score = 0
 
 
 # imported images
@@ -42,8 +45,9 @@ pygame.mixer.music.play(-1)
 gotA = pygame.mixer.Sound('Pickup_04.wav')  
 gotF = pygame.mixer.Sound('Explosion_02.wav')  
 
-
 #basic graphic support
+myfont = pygame.font.SysFont("monospace", 35)
+
 class Background(pygame.sprite.Sprite):
 
     def __init__(self, image_file, location):
@@ -93,6 +97,9 @@ def message_display(text):
     TextRect.center = ((display_width/2),(display_height/2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
+    pygame.draw.rect(gameDisplay, black, [5, 10, 150, 25])
+    scoretext = myfont.render("GRADE: "+str(score), 1, (0, 255, 17))
+    gameDisplay.blit(scoretext, (5, 10))
     time.sleep(2)
     game_loop()
     
@@ -161,7 +168,7 @@ def game_loop():
 
     BackGround = Background('b.png', [0,0])
 
-    myfont = pygame.font.SysFont("monospace", 35)
+
 
     #game loop
     while not gameExit:
@@ -174,18 +181,13 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x_change = -20
+                    x_change = -30
                 if event.key == pygame.K_RIGHT:
-                    x_change = 20
+                    x_change = 30
 
         x += x_change
         gameDisplay.fill([255, 255, 255])
         gameDisplay.blit(BackGround.image, BackGround.rect)
-
-        pygame.draw.rect(gameDisplay, black, [5, 10, 150, 25])
-
-        scoretext = myfont.render("GRADE: "+str(score), 1, (0, 255, 17))
-        gameDisplay.blit(scoretext, (5, 10))
 
         #Game logic
         things(thing_startx, thing_starty, thing_width, thing_height, rnd)
@@ -202,8 +204,11 @@ def game_loop():
         gpablip(x,y)
 
         #cant leave game borders
-        if x > display_width - gpa_width or x < 0:
-            Fail()
+        if x > display_width - gpa_width :
+            x  =  0 
+
+        elif x < 0:
+            x = display_width - gpa_width
 
         #drop objects
         if thing_starty > display_height:
@@ -245,6 +250,7 @@ def game_loop():
                 if drop1:
                     if rnd == BImg:
                         score-=75
+                        gotF.play()
                     else:  
                         gotA.play()
                         score+=60
@@ -295,10 +301,17 @@ def game_loop():
                     gotF.play()
                     score-=75
                     drop5= False 
-            
+         
+
+        #update score 
+        pygame.draw.rect(gameDisplay, black, [5, 10, 150, 25])
+
+        scoretext = myfont.render("GRADE: "+str(score), 1, (0, 255, 17))
+        gameDisplay.blit(scoretext, (5, 10))
+   
 
         if score < 0:
-            #wins.play()
+         
             Fail()
         elif score >=500:
             #loses.play()
