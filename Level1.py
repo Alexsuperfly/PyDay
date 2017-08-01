@@ -3,9 +3,10 @@ Alexander Sumner
 FSUID: acs14k
 """
 
-import sys
+import time
 import pygame
 import os
+import random
 from pygame.locals import *
 
 global SCREEN_WIDTH 
@@ -15,7 +16,9 @@ global SCREEN_HEIGHT
 SCREEN_HEIGHT = 600
 
 global ROW_COOLDOWN
-ROW_COOLDOWN = 27
+ROW_COOLDOWN = 32
+
+random.seed()
 
 
 def load_png(name):
@@ -35,7 +38,7 @@ class Player(pygame.sprite.Sprite):
 		self.image, self.rect = load_png("character.png")
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
-		self.speed = 6
+		self.speed = 12
 		self.state = "falling"
 		self.movepos = [0,5]
 		self.rect.midtop = self.area.midtop
@@ -58,6 +61,14 @@ class Player(pygame.sprite.Sprite):
 	def dead(self):
 		if self.rect.top < 1:
 			return 1
+		else:
+			return 0
+
+	def win(self):
+		if self.rect.bottom > (SCREEN_HEIGHT - 6):
+			return 1
+		else:
+			return 0
 
 
 class block(pygame.sprite.Sprite):
@@ -103,7 +114,25 @@ class Row(object):
 	def clear(self, screen, background):
 		self.myblocks.clear(screen,background)
 
+def text_objects(text, font):
 
+    textSurface = font.render(text, True, (255,255,255))
+    return textSurface, textSurface.get_rect()
+
+def message_display(text, screen):
+
+    largeText = pygame.font.Font('freesansbold.ttf',50)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
+    screen.blit(TextSurf, TextRect)
+    pygame.display.update()
+
+def gen_random_gap():
+	gaplocation = random.randint(50,(SCREEN_WIDTH-100))
+	gapsize = random.randint(70,80)
+	return (gaplocation,gapsize)
+
+    
 def main():
 	#Initialize system
 	pygame.init()
@@ -123,11 +152,11 @@ def main():
 	global rows
 	rows = []
 
-	global NUMROWS
-	NUMROWS = 5
-
 	global rowcooldown
 	rowcooldown = 10
+
+	global failed
+	failed = 0
 
 	#Initialize sprites
 	playersprite = pygame.sprite.RenderPlain(player)
@@ -139,16 +168,26 @@ def main():
 	#The event loop
 	while 1:
 		#max the fps at 60
-		clock.tick(45)
+		clock.tick(60)
 
 		if player.dead():
-			game_over()
+			message_display('You Failed, Try Again ',screen)
+			time.sleep(3)
+			#pygame.event.clear()
+			failed = 1
 			break
+
+		if player.win():
+			message_display('You Succeeded', screen)
+			time.sleep(3)
+			pygame.event.clear()
+			pygame.event.post(pygame.event.Event(QUIT))
 
 		if rowcooldown:
 			rowcooldown = rowcooldown -1
 		else:
-			rows.append(Row(400,60))
+			gloc,gsize = gen_random_gap()
+			rows.append(Row(gloc,gsize))
 			rowcooldown = ROW_COOLDOWN
 
 		for event in pygame.event.get():
@@ -164,6 +203,8 @@ def main():
 					player.movepos = [0,5]
 					player.state = "falling"
 
+		
+
 		#fill old areas with background again
 		screen.blit(background, player.rect, player.rect)
 		for each in rows:
@@ -175,6 +216,13 @@ def main():
 			if each.update():
 				rows.remove(each)
 
+		for row in rows:
+			for block in row.myblocks:
+				if player.rect.colliderect(block.rect):
+					if (block.rect.top + 11) >= player.rect.bottom:
+						player.rect.bottom = block.rect.top
+
+
 		#draw the assets
 		playersprite.draw(screen)
 		for each in rows:
@@ -182,6 +230,9 @@ def main():
 		
 		#re draw the whole board
 		pygame.display.flip()
+
+	if failed == 1:
+		main()
 
 
 if __name__ == "__main__": main()
