@@ -170,6 +170,7 @@ def main():
 		#max the fps at 60
 		clock.tick(60)
 
+		#if they lost break out of the loop and set failed to 1 to indicate a restart
 		if player.dead():
 			message_display('You Failed, Try Again ',screen)
 			time.sleep(3)
@@ -177,12 +178,14 @@ def main():
 			failed = 1
 			break
 
+		#if they won close the game
 		if player.win():
 			message_display('You Succeeded', screen)
 			time.sleep(3)
 			pygame.event.clear()
 			pygame.event.post(pygame.event.Event(QUIT))
 
+		#how many frames to wait untill we make another row
 		if rowcooldown:
 			rowcooldown = rowcooldown -1
 		else:
@@ -190,6 +193,7 @@ def main():
 			rows.append(Row(gloc,gsize))
 			rowcooldown = ROW_COOLDOWN
 
+		#the even queue
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				return
@@ -216,6 +220,7 @@ def main():
 			if each.update():
 				rows.remove(each)
 
+		#collision detection
 		for row in rows:
 			for block in row.myblocks:
 				if player.rect.colliderect(block.rect):
@@ -231,6 +236,7 @@ def main():
 		#re draw the whole board
 		pygame.display.flip()
 
+	#restart the game since they failed last time
 	if failed == 1:
 		main()
 
