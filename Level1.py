@@ -115,12 +115,10 @@ class Row(object):
 		self.myblocks.clear(screen,background)
 
 def text_objects(text, font):
-
     textSurface = font.render(text, True, (255,255,255))
     return textSurface, textSurface.get_rect()
 
 def message_display(text, screen):
-
     largeText = pygame.font.Font('freesansbold.ttf',50)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
@@ -193,7 +191,7 @@ def main():
 			rows.append(Row(gloc,gsize))
 			rowcooldown = ROW_COOLDOWN
 
-		#the even queue
+		#the event queue
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				return
