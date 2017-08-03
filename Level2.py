@@ -6,48 +6,6 @@ import random
 """Level for PyDay: Survive The Semester"""
 
 #pygame
-pygame.init()
-pygame.mixer.pre_init(44100,16,2,4096)
-
-#display settings
-display_width = 800
-display_height = 600
-black = (0,0,0)
-white = (255,255,255)
-red = (255,0,0)
-gpa_width = 73
-gameDisplay = pygame.display.set_mode((display_width,display_height))
-pygame.display.set_caption('Pass Python')
-clock = pygame.time.Clock()
-
-#score
-score = 0
-
-
-# imported images
-gpaIMG = pygame.image.load(os.path.join('data', 'gpa.png'))
-AImg = pygame.image.load(os.path.join('data', 'goodgrade.png'))
-BImg = pygame.image.load(os.path.join('data', 'badgrade.png'))
-StackImg = pygame.image.load(os.path.join('data', 'stack.png'))
-brimg = pygame.image.load(os.path.join('data', 'idk.png'))
-
-imagelst = []
-imagelst.append(AImg)      
-imagelst.append(BImg) 
-test = []
-test.append(AImg)      
-test.append(BImg) 
-test.append(StackImg)
-
-#music and sounds
-pygame.mixer.music.load(os.path.join('data', '3.wav'))
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1)
-gotA = pygame.mixer.Sound(os.path.join('data', 'Pickup_04.wav'))
-gotF = pygame.mixer.Sound(os.path.join('data', 'Explosion_02.wav'))
-
-#basic graphic support
-myfont = pygame.font.SysFont("monospace", 35)
 
 class Background(pygame.sprite.Sprite):
 
@@ -102,7 +60,21 @@ def message_display(text):
     scoretext = myfont.render("GRADE: "+str(score), 1, (0, 255, 17))
     gameDisplay.blit(scoretext, (5, 10))
     time.sleep(2)
-    game_loop()
+    game_loop(display_width,display_height)
+
+
+def win_display(text):
+
+    largeText = pygame.font.Font('freesansbold.ttf',50)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((display_width/2),(display_height/2))
+    gameDisplay.blit(TextSurf, TextRect)
+    pygame.display.update()
+    pygame.draw.rect(gameDisplay, black, [5, 10, 150, 25])
+    scoretext = myfont.render("GRADE: "+str(score), 1, (0, 255, 17))
+    gameDisplay.blit(scoretext, (5, 10))
+    time.sleep(1)
+
     
 # Main Game functiona
 def Fail():
@@ -110,9 +82,68 @@ def Fail():
 
 
 def win():
-    message_display('You survived the semester!')    
+    win_display('You survived the semester!')   
+
+
     
-def game_loop():
+def game_loop(width, height):
+
+
+
+    pygame.init()
+    pygame.mixer.pre_init(44100,16,2,4096)
+
+    global display_width
+    display_width = width
+    global display_height
+    display_height = height
+
+    #display settings
+
+    global black
+    black = (0,0,0)
+
+    white = (255,255,255)
+    red = (255,0,0)
+    gpa_width = 73
+    global gameDisplay
+    gameDisplay = pygame.display.set_mode((display_width,display_height))
+
+    pygame.display.set_caption('Pass Python')
+    clock = pygame.time.Clock()
+
+    #score
+    global score
+    score = 0
+
+
+    # imported images
+    global gpaIMG
+    gpaIMG = pygame.image.load(os.path.join('data', 'gpa.png'))
+    AImg = pygame.image.load(os.path.join('data', 'goodgrade.png'))
+    BImg = pygame.image.load(os.path.join('data', 'badgrade.png'))
+    StackImg = pygame.image.load(os.path.join('data', 'stack.png'))
+    brimg = pygame.image.load(os.path.join('data', 'idk.png'))
+
+    imagelst = []
+    imagelst.append(AImg)      
+    imagelst.append(BImg) 
+    test = []
+    test.append(AImg)      
+    test.append(BImg) 
+    test.append(StackImg)
+
+    #music and sounds
+    pygame.mixer.music.load(os.path.join('data', '3.wav'))
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+    gotA = pygame.mixer.Sound(os.path.join('data', 'Pickup_04.wav'))
+    gotF = pygame.mixer.Sound(os.path.join('data', 'Explosion_02.wav'))
+
+    #basic graphic support
+    global myfont
+    myfont = pygame.font.SysFont("monospace", 35)
+
 
     score = 100
     x = (display_width * 0.45)
@@ -317,12 +348,14 @@ def game_loop():
         elif score >=500:
             #loses.play()
             win()
+            gameExit = True
+
                            
         pygame.display.update()
         clock.tick(120)
 
 
 if __name__ == '__main__':
-    game_loop()
+    game_loop(800,600)
     pygame.quit()
     quit()
