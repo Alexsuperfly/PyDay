@@ -53,7 +53,7 @@ def message_display(gameDisplay, text):
     scoretext = myfont.render("GRADE: "+str(score), 1, (0, 255, 17))
     gameDisplay.blit(scoretext, (5, 10))
     time.sleep(2)
-    game_loop(gameDisplay.get_width()),(gameDisplay.get_height())
+    game_loop(gameDisplay)
 
 
 def win_display(gameDisplay, text):
