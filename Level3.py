@@ -9,7 +9,7 @@ class Game(object):
         
         background = pygame.image.load(os.path.join('data', 'Level3bg.png'))
         
-        self.tilemap = tmx.load(os.path.join('data', 'tilemaps', 'mazemap.tmx'), screen.get_size())
+        self.tilemap = tmx.load(os.path.join('data', 'tilemaps', 'platforms.tmx'), screen.get_size())
         
         self.sprites = tmx.SpriteLayer()
         start_cell = self.tilemap.layers['triggers'].find('player')[0]

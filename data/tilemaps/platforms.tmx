@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" source="./data/tilemaps/triggers.tsx"/>
+ <tileset firstgid="33" source="./data/tilemaps/mazetiles.tsx"/>
+ <tileset firstgid="35" source="./data/tilemaps/mazetiles.tsx"/>
+ <imagelayer name="Image Layer 1">
+ <image source="./data/Level3bg.png" width="1600" height="1600"/>
+ </imagelayer>
+ <layer name="set" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztVtsOhSAM41f0/z/yxIe9wWGbuxTTJk1MxNFSBl5jjIskSZIkSZIkJ8xEdn2Z42s+snLr8KEZv6qh8Z/VB1YfqHjjA8H3LCcEXR5UnbuRWGm2+ED2bfWBirc+OjPy3m+IeXzFx4NoHwh7TDsWCewPe32Ppn/vIs5MxDwEVT4yzgD0/rDoquqPCu+oeazm1pwD2lreebKBlodlv0f0ecT6ezRoa8jzvfimC9Z7cJZV997XoNJH9Hrs9J2UxU7jCR4E3rslylv0P2y0po4MT9g3Ak1+nlpIa4CkxQPENfVgd9+dyB/dS31v
+  </data>
+ </layer>
+ <layer name="triggers" width="50" height="50" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztmtsOgjAMhhv1RvQGPCTo+7+n9GIRlq2zY+065E8a4wHYt/bvYHEEgHvjMU5xg/Y1wM5hSf/KMUoNZKU4HCNsg8Oydo6vLNTang85he47UhqIY0uF9PndNaTzcRA+P0qjrrQ5zlNciXhkXkOb45frvQKfPYHmvzB++0uE5pPLYVVrOEK50Rbmt4clx6necFapA5vrICXnL98jHA7Xz3L7lpTw/o7DYbUPlOCI5VlDzuO+z1OymA/0+FbqituvUhw1a6zlfGzNHygpDpwrbn1Rx1A1W9ofNaXFIdEDrPuDw6zhD60e3JI/UvNSiqPmGoiylo/583tqTkr4vMT8c8YcU8znR+IYq/4I+Rzf95Gw/Pzrc3SxH8JyHypHpXtByh8hlrUMUkqtg3MWqwxOqXUQvw8x5NzLhkTVGbcGS+1f+fu22uthS/twVI64HLXnPabW/8+Ae5x+333XG062htkrznFsDW8lkOEDiG8dDg==
+  </data>
+ </layer>
+</map>
