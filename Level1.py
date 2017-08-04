@@ -9,11 +9,11 @@ import os
 import random
 from pygame.locals import *
 
-global SCREEN_WIDTH 
-SCREEN_WIDTH = 800
+#global SCREEN_WIDTH 
+#SCREEN_WIDTH = 800
 
-global SCREEN_HEIGHT
-SCREEN_HEIGHT = 600
+#global SCREEN_HEIGHT
+#SCREEN_HEIGHT = 600
 
 global ROW_COOLDOWN
 ROW_COOLDOWN = 32
@@ -33,7 +33,7 @@ def load_png(name):
 class Player(pygame.sprite.Sprite):
 	"""A player object that the user will move across the screen"""
 
-	def __init__(self):
+	def __init__(self, width, height):
 		pygame.sprite.Sprite.__init__(self)
 		self.image, self.rect = load_png("character.png")
 		screen = pygame.display.get_surface()
@@ -43,6 +43,8 @@ class Player(pygame.sprite.Sprite):
 		self.movepos = [0,5]
 		self.rect.midtop = self.area.midtop
 		self.rect.top = self.rect.top + 10
+		self.screenwidth = width
+		self.screenheight = height
 
 	def update(self):
 		newpos = self.rect.move(self.movepos)
@@ -65,21 +67,22 @@ class Player(pygame.sprite.Sprite):
 			return 0
 
 	def win(self):
-		if self.rect.bottom > (SCREEN_HEIGHT - 6):
+		if self.rect.bottom > (self.screenheight - 6):
 			return 1
 		else:
 			return 0
 
 
 class block(pygame.sprite.Sprite):
-	def __init__(self, xpos):
+	def __init__(self, xpos, height):
 		pygame.sprite.Sprite.__init__(self)
 		self.image, self.rect = load_png("block.png")
+		self.screenheight = height
 		self.movepos = [0,-4]
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 		self.rect.left = xpos
-		self.rect.top = SCREEN_HEIGHT - 20
+		self.rect.top = self.screenheight - 20
 
 	def update(self):
 		newpos = self.rect.move(self.movepos)
@@ -89,15 +92,17 @@ class block(pygame.sprite.Sprite):
 
 
 class Row(object):
-	def __init__(self, glocation, gsize):
+	def __init__(self, glocation, gsize, width, height):
 		self.myblocks = pygame.sprite.Group()
+		self.screenwidth = width
+		self.screenheight = height
 		self.speed = 4
 		self.gaplocation = glocation
 		self.gapsize = gsize
-		self.yposition = SCREEN_HEIGHT - 20
-		for x in range(0,SCREEN_WIDTH,20):
+		self.yposition = self.screenheight - 20
+		for x in range(0,self.screenwidth,20):
 			if x < glocation or x > (glocation+gsize):
-				self.myblocks.add(block(x))
+				self.myblocks.add(block(x, self.screenheight))
 
 	def update(self):
 		if (self.yposition > 0):
@@ -118,23 +123,29 @@ def text_objects(text, font):
     textSurface = font.render(text, True, (255,255,255))
     return textSurface, textSurface.get_rect()
 
-def message_display(text, screen):
-    largeText = pygame.font.Font('freesansbold.ttf',50)
+def message_display(text, screen, width, height):
+    textsize = int(height / 10)
+    largeText = pygame.font.Font('freesansbold.ttf',textsize)
     TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
+    TextRect.center = ((width/2),(height/2))
     screen.blit(TextSurf, TextRect)
     pygame.display.update()
 
-def gen_random_gap():
-	gaplocation = random.randint(50,(SCREEN_WIDTH-100))
+def gen_random_gap(width):
+	gaplocation = random.randint(50,(width-100))
 	gapsize = random.randint(70,80)
 	return (gaplocation,gapsize)
 
     
-def main():
+def main(width = 800, height = 600, screen = None):
 	#Initialize system
 	pygame.init()
-	screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+
+	SCREEN_WIDTH = width
+	SCREEN_HEIGHT = height
+
+	if screen == None:
+		screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 	pygame.display.set_caption("Level 1")
 	clock = pygame.time.Clock()
 
@@ -145,7 +156,7 @@ def main():
 
 	#Create player
 	global player
-	player = Player()
+	player = Player(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 	global rows
 	rows = []
@@ -170,7 +181,7 @@ def main():
 
 		#if they lost break out of the loop and set failed to 1 to indicate a restart
 		if player.dead():
-			message_display('You Failed, Try Again ',screen)
+			message_display('You Failed, Try Again ',screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 			time.sleep(3)
 			#pygame.event.clear()
 			failed = 1
@@ -178,7 +189,7 @@ def main():
 
 		#if they won close the game
 		if player.win():
-			message_display('You Succeeded', screen)
+			message_display('You Succeeded', screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 			time.sleep(3)
 			pygame.event.clear()
 			pygame.event.post(pygame.event.Event(QUIT))
@@ -187,8 +198,8 @@ def main():
 		if rowcooldown:
 			rowcooldown = rowcooldown -1
 		else:
-			gloc,gsize = gen_random_gap()
-			rows.append(Row(gloc,gsize))
+			gloc,gsize = gen_random_gap(SCREEN_WIDTH)
+			rows.append(Row(gloc,gsize,SCREEN_WIDTH, SCREEN_HEIGHT))
 			rowcooldown = ROW_COOLDOWN
 
 		#the event queue
@@ -236,7 +247,7 @@ def main():
 
 	#restart the game since they failed last time
 	if failed == 1:
-		main()
+		main(SCREEN_WIDTH,SCREEN_HEIGHT,screen)
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__": main(1200,800)
