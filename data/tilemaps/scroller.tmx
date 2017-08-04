@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="tiles.tsx"/>
+ <tileset firstgid="2" source="triggers.tsx"/>
+ <layer name="map" width="100" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt2DEKACAMBEH9/6d9gU0aF5yB6wNXhGStuS3XvFKd62e66NFFjy5a9AHAhP3Roo8O90eH+7zD/6rj9Q+1nKkDsJAAuw==
+  </data>
+ </layer>
+ <layer name="triggers" width="100" height="15" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztmEkKwDAIRXOPDvc/ZhFaKIUu4v9Go3ngroP4lAyt6dlW/IaGU/neG4u8qsLwIVR3cZC+w/IheLjoqYPVswjf/zB9CIiLUTVgw8w7kg8EVu+P7gnr+agO6lN87IxEbpB8rHvTYv1Ac846H1HWHsZ8MJlhnxvFnZBtf8WurXcOs58/eog0Fw9W85HtfN7rLtL5fN1f8UB9eN+hRg4N4uMC1mUY4w==
+  </data>
+ </layer>
+</map>

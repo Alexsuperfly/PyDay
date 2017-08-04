@@ -16,31 +16,25 @@ class Background(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = location
 
-def gpablip(x,y):
-
+def gpablip(gameDisplay, x,y):
     gameDisplay.blit(gpaIMG,(x,y))
 
 
 
 # falling object funtions
-def things(thingx, thingy, thingw, thingh, color):
-
+def things(gameDisplay, thingx, thingy, thingw, thingh, color):
      gameDisplay.blit(color,(thingx,thingy))
 
-def things2(thingx, thingy, thingw, thingh, color):
-
+def things2(gameDisplay, thingx, thingy, thingw, thingh, color):
      gameDisplay.blit(color,(thingx,thingy))     
 
-def things3(thingx, thingy, thingw, thingh, color):
-
+def things3(gameDisplay, thingx, thingy, thingw, thingh, color):
     gameDisplay.blit(color,(thingx,thingy)) 
 
-def things4(thingx, thingy, thingw, thingh, color):
-
+def things4(gameDisplay,thingx, thingy, thingw, thingh, color):
     gameDisplay.blit(color,(thingx,thingy))              
     
-def things5(thingx, thingy, thingw, thingh, color):
-
+def things5(gameDisplay, thingx, thingy, thingw, thingh, color):
     gameDisplay.blit(color,(thingx,thingy))     
 
 #Message Support
@@ -49,11 +43,10 @@ def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
 
-def message_display(text):
-
+def message_display(gameDisplay, text):
     largeText = pygame.font.Font('freesansbold.ttf',50)
     TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((display_width/2),(display_height/2))
+    TextRect.center = ((gameDisplay.get_width()/2),(gameDisplay.get_height()/2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
     pygame.draw.rect(gameDisplay, black, [5, 10, 150, 25])
@@ -63,11 +56,10 @@ def message_display(text):
     game_loop(display_width,display_height)
 
 
-def win_display(text):
-
+def win_display(gameDisplay, text):
     largeText = pygame.font.Font('freesansbold.ttf',50)
     TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((display_width/2),(display_height/2))
+    TextRect.center = ((gameDisplay.get_width()/2),(gameDisplay.get_height()/2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
     pygame.draw.rect(gameDisplay, black, [5, 10, 150, 25])
@@ -77,26 +69,27 @@ def win_display(text):
 
     
 # Main Game functiona
-def Fail():
-    message_display('You Failed Python. ')
+def Fail(gameDisplay):
+    message_display(gameDisplay, 'You Failed Python. ')
 
 
-def win():
-    win_display('You survived the semester!')   
+def win(gameDisplay):
+    win_display(gameDisplay, 'You survived the semester!')   
 
 
     
-def game_loop(width, height):
+def game_loop(gameDisplay):
 
-
-
+    """
     pygame.init()
     pygame.mixer.pre_init(44100,16,2,4096)
-
-    global display_width
-    display_width = width
-    global display_height
-    display_height = height
+    """
+    
+    #global display_width
+    display_width = gameDisplay.get_width()
+    #global display_height
+    display_height = gameDisplay.get_height()
+    
 
     #display settings
 
@@ -106,8 +99,8 @@ def game_loop(width, height):
     white = (255,255,255)
     red = (255,0,0)
     gpa_width = 73
-    global gameDisplay
-    gameDisplay = pygame.display.set_mode((display_width,display_height))
+    #global gameDisplay
+    #gameDisplay = pygame.display.set_mode((display_width,display_height))
 
     pygame.display.set_caption('Pass Python')
     clock = pygame.time.Clock()
@@ -222,18 +215,18 @@ def game_loop(width, height):
         gameDisplay.blit(BackGround.image, BackGround.rect)
 
         #Game logic
-        things(thing_startx, thing_starty, thing_width, thing_height, rnd)
+        things(gameDisplay, thing_startx, thing_starty, thing_width, thing_height, rnd)
         thing_starty += thing_speed
-        things2(thing_startx2, thing_starty2, thing_width2, thing_height2, rnd2)
+        things2(gameDisplay, thing_startx2, thing_starty2, thing_width2, thing_height2, rnd2)
         thing_starty2+= thing_speed2
-        things3(thing_startx3, thing_starty3, thing_width3, thing_height3, rnd3)
+        things3(gameDisplay, thing_startx3, thing_starty3, thing_width3, thing_height3, rnd3)
         thing_starty3+= thing_speed3
-        things4(thing_startx4, thing_starty4, thing_width4, thing_height4, rnd4)
+        things4(gameDisplay, thing_startx4, thing_starty4, thing_width4, thing_height4, rnd4)
         thing_starty4+= thing_speed4
-        things5(thing_startx5, thing_starty5, thing_width5, thing_height5, rnd5)
+        things5(gameDisplay, thing_startx5, thing_starty5, thing_width5, thing_height5, rnd5)
         thing_starty5+= thing_speed5
 
-        gpablip(x,y)
+        gpablip(gameDisplay, x,y)
 
         #cant leave game borders
         if x > display_width - gpa_width :
@@ -344,10 +337,10 @@ def game_loop(width, height):
 
         if score < 0:
          
-            Fail()
+            Fail(gameDisplay)
         elif score >=500:
             #loses.play()
-            win()
+            win(gameDisplay)
             gameExit = True
 
                            

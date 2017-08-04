@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="data/tilemaps/tiles.tsx"/>
+ <tileset firstgid="2" source="data/tilemaps/triggers.tsx"/>
+ <layer name="set" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztlkEOgCAQA+H/n/a8B2OCQEeZSTg2WFsbe2ut/+R8HX2w0AeLE32Qd472PKPoo+rTXTMPFu4VC31Ufbpr5sHCvWKhj6pPd808WLhXLPRR9emumQcL94qFPqr+qWurO2keLFZmvGvXiPs5ij6qPp2tebB4+3/1dHZxYh5k7nyMdCj5PtL3zyL1Pc7Oc7Q/xHMBpUQBKg==
+  </data>
+ </layer>
+ <layer name="triggers" width="50" height="50" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztmsEKgzAQRJceC720tYWl0v//yxq8hBCjdpM4JvNgDkKMDjuuC6oiMpxcOukp5+ch9IFErz601I0Y2eNDpQ0f94hQ6PX5iIGQNasPlKwxV1iwX2HRsw+/z6Jkred6IMJ+hUULPlzfsfp4T7p5emW4r73k8IFArz4QMhSjlXo46GMG5d3IemDB+QoL+pjZmrXSmWQ9sCjho3Zfc3Mfv3NiwfkKi60+vsHxmFir3prwvFJY56s11aLlXLksqKdR0t8Aj8hRyFI9/snQkXN8i/8zfCpc7yrLtbwY9nU+NLF3bumKLPv+APUvGRE=
+  </data>
+ </layer>
+</map>
