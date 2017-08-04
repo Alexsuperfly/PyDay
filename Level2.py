@@ -53,7 +53,7 @@ def message_display(gameDisplay, text):
     scoretext = myfont.render("GRADE: "+str(score), 1, (0, 255, 17))
     gameDisplay.blit(scoretext, (5, 10))
     time.sleep(2)
-    game_loop(display_width,display_height)
+    game_loop(gameDisplay)
 
 
 def win_display(gameDisplay, text):
@@ -127,9 +127,7 @@ def game_loop(gameDisplay):
     test.append(StackImg)
 
     #music and sounds
-    pygame.mixer.music.load(os.path.join('data', '3.wav'))
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)
+
     gotA = pygame.mixer.Sound(os.path.join('data', 'Pickup_04.wav'))
     gotF = pygame.mixer.Sound(os.path.join('data', 'Explosion_02.wav'))
 
